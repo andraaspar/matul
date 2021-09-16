@@ -1,0 +1,10 @@
+node_modules
+src
+.gitignore
+.npmignore
+jest.config.js
+prettier.config.js
+test.tsconfig.json
+tsconfig.json
+webpack.config.js
+yarn.lock

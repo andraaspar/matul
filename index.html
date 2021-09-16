@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Matul</title>
+	</head>
+	<body>
+		<div id="app">Loading...</div>
+		<script src="dist/matul.js"></script>
+		<script>
+			const { m, mount, render, FragmentComp } = matul;
+
+			const EnterNameComp = () => [
+				m("p", [
+					"Enter your name: ",
+					m("input", {
+						value: localStorage.name || "",
+						oninput: function () {
+							localStorage.name = this.value;
+							render();
+						},
+					}),
+				]),
+			];
+
+			const SayHelloComp = (_, v) => {
+				const name = localStorage.name || v.props.defaultName;
+				return [
+					m("p", [
+						m(
+							"button",
+							{
+								onclick: () => {
+									document.cookie = `Hello ${name}! =MATUL!!!`;
+									render();
+								},
+							},
+							["Say hello to " + name]
+						),
+					]),
+				];
+			};
+
+			const OutputComp = () => [
+				document.cookie
+					.split(";")
+					.map((item, index) => m("div", { key: index }, [item.split("=")[0]])),
+			];
+
+			const AppComp = () => [
+				//
+				m(EnterNameComp),
+				m(SayHelloComp, { defaultName: "World" }),
+				m(OutputComp),
+			];
+
+			mount(document.getElementById("app"), AppComp);
+			render();
+		</script>
+	</body>
+</html>
