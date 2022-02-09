@@ -139,7 +139,7 @@ var VList = /** @class */ (function () {
             }
         }
         if (this.itemByKey.size && this.itemByKey.size < expectedKeyCount) {
-            throw new Error("[qqf32k] Missing keys.");
+            throw new Error("[qqf32k] Duplicate / missing keys in list: actual count = " + this.itemByKey.size + " < expected count = " + expectedKeyCount);
         }
     }
     VList.prototype.calculateCount = function () {
