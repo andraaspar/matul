@@ -12,6 +12,7 @@ import { VElement } from "../model/VElement";
 import { VText } from "../model/VText";
 
 const isDataRe = /^data-/i;
+const isAttributeRe = /^attr--/i;
 const isEventHandlerRe = /^on/;
 
 class HtmlResultHandler implements IResultHandler<Node> {
@@ -28,10 +29,17 @@ class HtmlResultHandler implements IResultHandler<Node> {
 	}
 	add(p: IResultHandlerAddParams<Node>): Node | undefined {
 		// console.log(`[qqdewl] add:`, parent, i, v)
-		const doc = p.parent.ownerDocument ?? (p.parent as Document);
 		let result;
+		const doc = p.parent.ownerDocument ?? (p.parent as Document);
 		if (p.virtual instanceof VElement) {
-			result = doc.createElement(p.virtual.name);
+			if (p.virtual.name === "svg" || p.parent instanceof SVGElement) {
+				result = doc.createElementNS(
+					"http://www.w3.org/2000/svg",
+					p.virtual.name
+				);
+			} else {
+				result = doc.createElement(p.virtual.name);
+			}
 			setProps(result, p.virtual, undefined);
 			if (p.virtual.trusted != null) {
 				result.innerHTML = p.virtual.trusted;
@@ -100,15 +108,44 @@ class HtmlResultHandler implements IResultHandler<Node> {
 function setProps(result: Node, v: VElement, oldV: VElement | undefined) {
 	for (let [name, value] of Object.entries(v.props)) {
 		if (oldV && value === oldV.props[name]) continue;
-		if (name === "class") {
-			(result as Element).className = value ?? "";
-		} else if (name === "style") {
-			(result as Element).setAttribute("style", value ?? "");
-		} else if (isDataRe.test(name)) {
-			(result as HTMLElement).dataset[dataNameToDatasetName(name)] =
-				value ?? "";
+		if (result instanceof HTMLElement) {
+			switch (name) {
+				case "class":
+					(result as Element).className = value ?? "";
+					break;
+				case "for":
+					(result as HTMLLabelElement).htmlFor = value ?? "";
+					break;
+				case "tabindex":
+					(result as HTMLInputElement).tabIndex = value ?? "";
+					break;
+				case "style":
+					(result as Element).setAttribute(name, value ?? "");
+					break;
+				default:
+					if (isDataRe.test(name)) {
+						result.dataset[dataNameToDatasetName(name)] = value ?? "";
+					} else if (isAttributeRe.test(name)) {
+						result.setAttribute(name.replace(isAttributeRe, ""), value ?? "");
+					} else {
+						(result as any)[name] = value ?? "";
+					}
+			}
+		} else if (result instanceof SVGElement) {
+			if (isEventHandlerRe.test(name)) {
+				(result as any)[name] = value ?? "";
+			} else {
+				(result as SVGElement).setAttribute(name, value ?? "");
+			}
 		} else {
-			(result as any)[name] = value ?? "";
+			if (isAttributeRe.test(name)) {
+				(result as Element).setAttribute(
+					name.replace(isAttributeRe, ""),
+					value ?? ""
+				);
+			} else {
+				(result as any)[name] = value ?? "";
+			}
 		}
 	}
 }

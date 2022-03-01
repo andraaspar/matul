@@ -353,7 +353,7 @@ function removeVirtual(_a) {
         });
         if (virtual.ref) {
             try {
-                virtual.ref(null);
+                virtual.ref(undefined);
             }
             catch (e) {
                 console.error(e);

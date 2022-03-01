@@ -64,7 +64,7 @@ export function removeVirtual<TResult>({
 		});
 		if (virtual.ref) {
 			try {
-				virtual.ref(null);
+				virtual.ref(undefined);
 			} catch (e) {
 				console.error(e);
 			}

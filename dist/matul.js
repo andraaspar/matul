@@ -366,7 +366,7 @@ function removeVirtual(_a) {
         });
         if (virtual.ref) {
             try {
-                virtual.ref(null);
+                virtual.ref(undefined);
             }
             catch (e) {
                 console.error(e);
@@ -906,6 +906,7 @@ function createElement(type, props) {
 
 
 var isDataRe = /^data-/i;
+var isAttributeRe = /^attr--/i;
 var isEventHandlerRe = /^on/;
 var HtmlResultHandler = /** @class */ (function () {
     function HtmlResultHandler(root) {
@@ -923,10 +924,15 @@ var HtmlResultHandler = /** @class */ (function () {
     HtmlResultHandler.prototype.add = function (p) {
         var _a;
         // console.log(`[qqdewl] add:`, parent, i, v)
-        var doc = (_a = p.parent.ownerDocument) !== null && _a !== void 0 ? _a : p.parent;
         var result;
+        var doc = (_a = p.parent.ownerDocument) !== null && _a !== void 0 ? _a : p.parent;
         if (p.virtual instanceof VElement) {
-            result = doc.createElement(p.virtual.name);
+            if (p.virtual.name === "svg" || p.parent instanceof SVGElement) {
+                result = doc.createElementNS("http://www.w3.org/2000/svg", p.virtual.name);
+            }
+            else {
+                result = doc.createElement(p.virtual.name);
+            }
             setProps(result, p.virtual, undefined);
             if (p.virtual.trusted != null) {
                 result.innerHTML = p.virtual.trusted;
@@ -1004,18 +1010,47 @@ function setProps(result, v, oldV) {
         var _b = _a[_i], name_2 = _b[0], value = _b[1];
         if (oldV && value === oldV.props[name_2])
             continue;
-        if (name_2 === "class") {
-            result.className = value !== null && value !== void 0 ? value : "";
+        if (result instanceof HTMLElement) {
+            switch (name_2) {
+                case "class":
+                    result.className = value !== null && value !== void 0 ? value : "";
+                    break;
+                case "for":
+                    result.htmlFor = value !== null && value !== void 0 ? value : "";
+                    break;
+                case "tabindex":
+                    result.tabIndex = value !== null && value !== void 0 ? value : "";
+                    break;
+                case "style":
+                    result.setAttribute(name_2, value !== null && value !== void 0 ? value : "");
+                    break;
+                default:
+                    if (isDataRe.test(name_2)) {
+                        result.dataset[dataNameToDatasetName(name_2)] = value !== null && value !== void 0 ? value : "";
+                    }
+                    else if (isAttributeRe.test(name_2)) {
+                        result.setAttribute(name_2.replace(isAttributeRe, ""), value !== null && value !== void 0 ? value : "");
+                    }
+                    else {
+                        result[name_2] = value !== null && value !== void 0 ? value : "";
+                    }
+            }
         }
-        else if (name_2 === "style") {
-            result.setAttribute("style", value !== null && value !== void 0 ? value : "");
-        }
-        else if (isDataRe.test(name_2)) {
-            result.dataset[dataNameToDatasetName(name_2)] =
-                value !== null && value !== void 0 ? value : "";
+        else if (result instanceof SVGElement) {
+            if (isEventHandlerRe.test(name_2)) {
+                result[name_2] = value !== null && value !== void 0 ? value : "";
+            }
+            else {
+                result.setAttribute(name_2, value !== null && value !== void 0 ? value : "");
+            }
         }
         else {
-            result[name_2] = value !== null && value !== void 0 ? value : "";
+            if (isAttributeRe.test(name_2)) {
+                result.setAttribute(name_2.replace(isAttributeRe, ""), value !== null && value !== void 0 ? value : "");
+            }
+            else {
+                result[name_2] = value !== null && value !== void 0 ? value : "";
+            }
         }
     }
 }
