@@ -20,6 +20,7 @@ export function applyHandlerToChildren<TResult>({
 	oldVirtuals: TVirtual[] | undefined;
 	parentIsBeingRemoved: boolean;
 }): number {
+	// try {
 	if (virtuals) {
 		if (oldVirtuals) {
 			for (let i = virtuals.length; i < oldVirtuals.length; i++) {
@@ -82,4 +83,8 @@ export function applyHandlerToChildren<TResult>({
 		}
 	}
 	return index;
+	// } catch (e) {
+	// 	console.error(`[r8um3b] Caught in:`, parent);
+	// 	throw e;
+	// }
 }

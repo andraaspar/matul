@@ -1,3 +1,4 @@
+import { VText } from "../core";
 import { IResultHandler } from "../model/IResultHandler";
 import { TVirtual } from "../model/TVirtual";
 import { VComponent } from "../model/VComponent";
@@ -41,7 +42,7 @@ export function moveVirtual<TResult>({
 			index = r.index;
 			oldIndex = r.oldIndex;
 		}
-	} else if (virtual instanceof VElement) {
+	} else if (virtual instanceof VElement || virtual instanceof VText) {
 		if (index !== oldIndex) {
 			handler.move({
 				parent,
@@ -62,8 +63,6 @@ export function moveVirtual<TResult>({
 			oldIndex++;
 		}
 		index++;
-	} else {
-		throw new Error(`[qyt32i] Invalid move virtual type.`);
 	}
 	return { index, oldIndex };
 }

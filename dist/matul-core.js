@@ -404,6 +404,7 @@ function getDeepIndex(index, items, item) {
 
 
 
+
 function moveVirtual(_a) {
     var handler = _a.handler, parent = _a.parent, index = _a.index, oldIndex = _a.oldIndex, virtual = _a.virtual;
     if (virtual instanceof VList) {
@@ -432,7 +433,7 @@ function moveVirtual(_a) {
             oldIndex = r.oldIndex;
         }
     }
-    else if (virtual instanceof VElement) {
+    else if (virtual instanceof VElement || virtual instanceof VText) {
         if (index !== oldIndex) {
             handler.move({
                 parent: parent,
@@ -453,9 +454,6 @@ function moveVirtual(_a) {
             oldIndex++;
         }
         index++;
-    }
-    else {
-        throw new Error("[qyt32i] Invalid move virtual type.");
     }
     return { index: index, oldIndex: oldIndex };
 }
@@ -644,6 +642,7 @@ function virtualTypesMatch(a, b) {
 
 function applyHandlerToChildren(_a) {
     var handler = _a.handler, parent = _a.parent, index = _a.index, virtuals = _a.virtuals, oldVirtuals = _a.oldVirtuals, parentIsBeingRemoved = _a.parentIsBeingRemoved;
+    // try {
     if (virtuals) {
         if (oldVirtuals) {
             for (var i = virtuals.length; i < oldVirtuals.length; i++) {
@@ -709,6 +708,10 @@ function applyHandlerToChildren(_a) {
         }
     }
     return index;
+    // } catch (e) {
+    // 	console.error(`[r8um3b] Caught in:`, parent);
+    // 	throw e;
+    // }
 }
 
 ;// CONCATENATED MODULE: ./src/fun/renderComponent.ts
