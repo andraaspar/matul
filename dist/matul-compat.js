@@ -14760,6 +14760,8 @@ var VComponent = /** @class */ (function () {
             this.renderedVirtual = this.renderedVirtual ? [this.renderedVirtual] : [];
         }
         this.renderedVirtual = wrapVirtuals(this.renderedVirtual);
+    };
+    VComponent.prototype.updateCount = function () {
         this.count = 0;
         for (var _i = 0, _a = this.renderedVirtual; _i < _a.length; _i++) {
             var virtual = _a[_i];
@@ -15322,6 +15324,7 @@ function renderComponent(virtual, oldVirtual) {
                 throw e;
             }
         }
+        virtual.updateCount();
     }
     else if (virtual instanceof VElement) {
         renderComponents(virtual.children, (_d = oldVirtual) === null || _d === void 0 ? void 0 : _d.children);

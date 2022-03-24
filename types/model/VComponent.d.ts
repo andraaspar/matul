@@ -13,4 +13,5 @@ export declare class VComponent<TProps extends object = {}, TState extends objec
     debug: number | undefined;
     constructor(renderInternal: TRenderAny<TProps>, props: TProps, children: TVirtual<TResult>[]);
     render(): void;
+    updateCount(): void;
 }

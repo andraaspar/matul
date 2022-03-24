@@ -65,6 +65,7 @@ export function renderComponent(
 				throw e;
 			}
 		}
+		virtual.updateCount();
 	} else if (virtual instanceof VElement) {
 		renderComponents(
 			virtual.children,

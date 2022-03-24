@@ -37,8 +37,11 @@ export class VComponent<
 			this.renderedVirtual = this.renderedVirtual ? [this.renderedVirtual] : [];
 		}
 		this.renderedVirtual = wrapVirtuals(this.renderedVirtual);
+	}
+
+	public updateCount(): void {
 		this.count = 0;
-		for (const virtual of this.renderedVirtual) {
+		for (const virtual of this.renderedVirtual!) {
 			if (virtual instanceof VList || virtual instanceof VComponent) {
 				this.count += virtual.count;
 			} else {

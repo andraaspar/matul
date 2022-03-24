@@ -1,3 +1,4 @@
+import { FragmentComp } from "../core";
 import { MockElement, MockResultHandler } from "../handler/MockResultHandler";
 import { Spread } from "../model/Spread";
 import { TRender } from "../model/TRender";
@@ -315,12 +316,8 @@ test(`[qqjb7h] Add list component.`, () => {
 	];
 	const handler = new MockResultHandler();
 	applyHandler(handler, v1);
-	const [
-		itemAStart1,
-		itemAEnd1,
-		itemCStart1,
-		itemCEnd1,
-	] = handler.getRoot().children;
+	const [itemAStart1, itemAEnd1, itemCStart1, itemCEnd1] =
+		handler.getRoot().children;
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<comp-a-start/>
 	<comp-a-end/>
@@ -330,14 +327,8 @@ test(`[qqjb7h] Add list component.`, () => {
 	handler.resetCallCounts();
 
 	applyHandler(handler, v2);
-	const [
-		itemAStart2,
-		itemAEnd2,
-		,
-		,
-		itemCStart2,
-		itemCEnd2,
-	] = handler.getRoot().children;
+	const [itemAStart2, itemAEnd2, , , itemCStart2, itemCEnd2] =
+		handler.getRoot().children;
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<comp-a-start/>
 	<comp-a-end/>
@@ -378,14 +369,8 @@ test(`[qqjbip] Remove list component.`, () => {
 	];
 	const handler = new MockResultHandler();
 	applyHandler(handler, v1);
-	const [
-		itemAStart1,
-		itemAEnd1,
-		,
-		,
-		itemCStart1,
-		itemCEnd1,
-	] = handler.getRoot().children;
+	const [itemAStart1, itemAEnd1, , , itemCStart1, itemCEnd1] =
+		handler.getRoot().children;
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<comp-a-start/>
 	<comp-a-end/>
@@ -396,12 +381,8 @@ test(`[qqjbip] Remove list component.`, () => {
 </document>`);
 
 	applyHandler(handler, v2);
-	const [
-		itemAStart2,
-		itemAEnd2,
-		itemCStart2,
-		itemCEnd2,
-	] = handler.getRoot().children;
+	const [itemAStart2, itemAEnd2, itemCStart2, itemCEnd2] =
+		handler.getRoot().children;
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<comp-a-start/>
 	<comp-a-end/>
@@ -435,12 +416,8 @@ test(`[qqjfkm] Swap list components.`, () => {
 	];
 	const handler = new MockResultHandler();
 	applyHandler(handler, v1);
-	const [
-		itemAStart1,
-		itemAEnd1,
-		itemBStart1,
-		itemBEnd1,
-	] = handler.getRoot().children;
+	const [itemAStart1, itemAEnd1, itemBStart1, itemBEnd1] =
+		handler.getRoot().children;
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<comp-a-start/>
 	<comp-a-end/>
@@ -449,12 +426,8 @@ test(`[qqjfkm] Swap list components.`, () => {
 </document>`);
 
 	applyHandler(handler, v2);
-	const [
-		itemBStart2,
-		itemBEnd2,
-		itemAStart2,
-		itemAEnd2,
-	] = handler.getRoot().children;
+	const [itemBStart2, itemBEnd2, itemAStart2, itemAEnd2] =
+		handler.getRoot().children;
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<comp-b-start/>
 	<comp-b-end/>
@@ -841,5 +814,93 @@ test(`[qz5wz0] List with element > component.`, () => {
 	<item-1>
 		<comp-1/>
 	</item-1>
+</document>`);
+});
+
+test(`[r98s08] Moving components with children in FragmentComp.`, () => {
+	const ItemComp: TRender<{ name: string }> = (_, v) => {
+		return [m(FragmentComp, [m("name", [v.props.name])])];
+	};
+	const v1 = [
+		[
+			//
+			m(ItemComp, { key: "a", name: "a" }),
+			m(ItemComp, { key: "b", name: "b" }),
+		],
+	];
+	const handler = new MockResultHandler();
+	applyHandler(handler, v1);
+	expect(handler.getRoot().toString()).toBe(`<document>
+	<name>
+		"a"
+	</name>
+	<name>
+		"b"
+	</name>
+</document>`);
+
+	const v2 = [
+		[
+			//
+			m(ItemComp, { key: "b", name: "b" }),
+			m(ItemComp, { key: "a", name: "a" }),
+		],
+	];
+	applyHandler(handler, v2);
+	expect(handler.getRoot().toString()).toBe(`<document>
+	<name>
+		"b"
+	</name>
+	<name>
+		"a"
+	</name>
+</document>`);
+});
+
+test(`[r995mt] Extra elements appear inside component.`, () => {
+	const ItemComp: TRender<{ name: string; isOpen?: boolean }> = (_, v) => {
+		return [
+			m(FragmentComp, [
+				m("name", [v.props.name]),
+				v.props.isOpen && m("open", [v.props.name]),
+			]),
+		];
+	};
+	const v1 = [
+		[
+			//
+			m(ItemComp, { key: "a", name: "a" }),
+			m(ItemComp, { key: "b", name: "b" }),
+		],
+	];
+	const handler = new MockResultHandler();
+	applyHandler(handler, v1);
+	expect(handler.getRoot().toString()).toBe(`<document>
+	<name>
+		"a"
+	</name>
+	<name>
+		"b"
+	</name>
+</document>`);
+
+	const v2 = [
+		[
+			//
+			m(ItemComp, { key: "a", name: "a", isOpen: true }),
+			m(ItemComp, { key: "b", name: "b" }),
+		],
+	];
+	applyHandler(handler, v2);
+	expect(handler.getRoot().toString()).toBe(`<document>
+	<name>
+		"a"
+	</name>
+	<open>
+		"a"
+	</open>
+	<name>
+		"b"
+	</name>
 </document>`);
 });
