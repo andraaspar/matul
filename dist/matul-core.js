@@ -129,7 +129,7 @@ var VList = /** @class */ (function () {
             throw new Error("[qqf32k] Duplicate / missing keys in list: actual count = " + this.itemByKey.size + " < expected count = " + expectedKeyCount);
         }
     }
-    VList.prototype.calculateCount = function () {
+    VList.prototype.updateCount = function () {
         this.count = 0;
         for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
             var item = _a[_i];
@@ -415,7 +415,7 @@ function moveVirtual(_a) {
                 handler: handler,
                 parent: parent,
                 index: index,
-                oldIndex: oldIndex + i,
+                oldIndex: oldIndex,
                 virtual: virtual.items[i],
             });
             index = r.index;
@@ -745,7 +745,7 @@ function renderComponent(virtual, oldVirtual) {
         else {
             renderComponents(virtual.items, (_a = oldVirtual) === null || _a === void 0 ? void 0 : _a.items);
         }
-        virtual.calculateCount();
+        virtual.updateCount();
     }
     else if (virtual instanceof VComponent) {
         if (oldVirtual instanceof VComponent) {

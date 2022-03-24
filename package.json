@@ -1,6 +1,6 @@
 {
 	"name": "matul",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "Virtual DOM library.",
 	"main": "dist/matul.js",
 	"types": "types/matul.d.ts",

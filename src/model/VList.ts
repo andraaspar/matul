@@ -27,7 +27,7 @@ export class VList<TResult = unknown> {
 			);
 		}
 	}
-	public calculateCount() {
+	public updateCount() {
 		this.count = 0;
 		for (const item of this.items) {
 			if (item instanceof VList || item instanceof VComponent) {

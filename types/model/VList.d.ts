@@ -6,5 +6,5 @@ export declare class VList<TResult = unknown> {
     itemByKey: Map<string | number, VElement<unknown> | VComponent<{}, {}, unknown>>;
     count: number;
     constructor(items: TVirtual<TResult>[]);
-    calculateCount(): void;
+    updateCount(): void;
 }

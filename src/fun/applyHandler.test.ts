@@ -857,12 +857,15 @@ test(`[r98s08] Moving components with children in FragmentComp.`, () => {
 </document>`);
 });
 
-test(`[r995mt] Extra elements appear inside component.`, () => {
-	const ItemComp: TRender<{ name: string; isOpen?: boolean }> = (_, v) => {
+test(`[r995mt] List items inside component.`, () => {
+	const ItemComp: TRender<{ name: string }> = (_, v) => {
 		return [
 			m(FragmentComp, [
 				m("name", [v.props.name]),
-				v.props.isOpen && m("open", [v.props.name]),
+				[
+					m("one", { key: "one" }, [v.props.name]),
+					m("two", { key: "two" }, [v.props.name]),
+				],
 			]),
 		];
 	};
@@ -879,28 +882,49 @@ test(`[r995mt] Extra elements appear inside component.`, () => {
 	<name>
 		"a"
 	</name>
+	<one>
+		"a"
+	</one>
+	<two>
+		"a"
+	</two>
 	<name>
 		"b"
 	</name>
+	<one>
+		"b"
+	</one>
+	<two>
+		"b"
+	</two>
 </document>`);
 
 	const v2 = [
 		[
 			//
-			m(ItemComp, { key: "a", name: "a", isOpen: true }),
 			m(ItemComp, { key: "b", name: "b" }),
+			m(ItemComp, { key: "a", name: "a" }),
 		],
 	];
 	applyHandler(handler, v2);
 	expect(handler.getRoot().toString()).toBe(`<document>
 	<name>
-		"a"
-	</name>
-	<open>
-		"a"
-	</open>
-	<name>
 		"b"
 	</name>
+	<one>
+		"b"
+	</one>
+	<two>
+		"b"
+	</two>
+	<name>
+		"a"
+	</name>
+	<one>
+		"a"
+	</one>
+	<two>
+		"a"
+	</two>
 </document>`);
 });

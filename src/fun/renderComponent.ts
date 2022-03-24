@@ -30,7 +30,7 @@ export function renderComponent(
 		} else {
 			renderComponents(virtual.items, (oldVirtual as VList | undefined)?.items);
 		}
-		virtual.calculateCount();
+		virtual.updateCount();
 	} else if (virtual instanceof VComponent) {
 		if (oldVirtual instanceof VComponent) {
 			virtual.debug = oldVirtual.debug;

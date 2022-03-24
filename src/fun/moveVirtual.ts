@@ -24,7 +24,7 @@ export function moveVirtual<TResult>({
 				handler,
 				parent,
 				index,
-				oldIndex: oldIndex + i,
+				oldIndex,
 				virtual: virtual.items[i],
 			});
 			index = r.index;
