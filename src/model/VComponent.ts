@@ -2,7 +2,9 @@ import { wrapVirtuals } from "../fun/wrapVirtuals";
 import { IComponentInternal } from "./IComponentInternal";
 import { TRenderAny } from "./TRender";
 import { TVirtual } from "./TVirtual";
+import { VElement } from "./VElement";
 import { VList } from "./VList";
+import { VText } from "./VText";
 
 export class VComponent<
 	TProps extends object = {},
@@ -44,7 +46,7 @@ export class VComponent<
 		for (const virtual of this.renderedVirtual!) {
 			if (virtual instanceof VList || virtual instanceof VComponent) {
 				this.count += virtual.count;
-			} else {
+			} else if (virtual instanceof VElement || virtual instanceof VText) {
 				this.count++;
 			}
 		}

@@ -928,3 +928,43 @@ test(`[r995mt] List items inside component.`, () => {
 	</two>
 </document>`);
 });
+
+test(`[r99a86] Placeholders inside component.`, () => {
+	const ItemComp: TRender<{ name: string }> = (_, v) => {
+		return [m(FragmentComp, [m("name", [v.props.name]), undefined, false])];
+	};
+	const v1 = [
+		[
+			//
+			m(ItemComp, { key: "a", name: "a" }),
+			m(ItemComp, { key: "b", name: "b" }),
+		],
+	];
+	const handler = new MockResultHandler();
+	applyHandler(handler, v1);
+	expect(handler.getRoot().toString()).toBe(`<document>
+	<name>
+		"a"
+	</name>
+	<name>
+		"b"
+	</name>
+</document>`);
+
+	const v2 = [
+		[
+			//
+			m(ItemComp, { key: "b", name: "b" }),
+			m(ItemComp, { key: "a", name: "a" }),
+		],
+	];
+	applyHandler(handler, v2);
+	expect(handler.getRoot().toString()).toBe(`<document>
+	<name>
+		"b"
+	</name>
+	<name>
+		"a"
+	</name>
+</document>`);
+});

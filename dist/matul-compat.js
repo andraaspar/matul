@@ -14740,6 +14740,8 @@ function wrapVirtuals(children) {
 ;// CONCATENATED MODULE: ./src/model/VComponent.ts
 
 
+
+
 var VComponent = /** @class */ (function () {
     function VComponent(renderInternal, props, children) {
         this.renderInternal = renderInternal;
@@ -14768,7 +14770,7 @@ var VComponent = /** @class */ (function () {
             if (virtual instanceof VList || virtual instanceof VComponent) {
                 this.count += virtual.count;
             }
-            else {
+            else if (virtual instanceof VElement || virtual instanceof VText) {
                 this.count++;
             }
         }
