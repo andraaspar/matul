@@ -95,7 +95,7 @@ class HtmlResultHandler implements IResultHandler<Node> {
 		if (p.virtual instanceof VElement) {
 			for (const prop of Object.keys(p.virtual.props)) {
 				if (isEventHandlerRe.test(prop)) {
-					(p.result as any)[prop] = null;
+					p.result.removeEventListener(prop.slice(2), p.virtual.props[prop]);
 				}
 			}
 		}
@@ -127,13 +127,27 @@ function setProps(result: Node, v: VElement, oldV: VElement | undefined) {
 						result.dataset[dataNameToDatasetName(name)] = value ?? "";
 					} else if (isAttributeRe.test(name)) {
 						result.setAttribute(name.replace(isAttributeRe, ""), value ?? "");
+					} else if (isEventHandlerRe.test(name)) {
+						const oldValue = oldV?.props[name];
+						if (oldValue) {
+							result.removeEventListener(name.slice(2), oldValue);
+						}
+						if (value) {
+							result.addEventListener(name.slice(2), value);
+						}
 					} else {
 						(result as any)[name] = value ?? "";
 					}
 			}
 		} else if (result instanceof SVGElement) {
 			if (isEventHandlerRe.test(name)) {
-				(result as any)[name] = value ?? "";
+				const oldValue = oldV?.props[name];
+				if (oldValue) {
+					result.removeEventListener(name.slice(2), oldValue);
+				}
+				if (value) {
+					result.addEventListener(name.slice(2), value);
+				}
 			} else {
 				(result as SVGElement).setAttribute(name, value ?? "");
 			}

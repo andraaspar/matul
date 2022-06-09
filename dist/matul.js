@@ -1003,7 +1003,7 @@ var HtmlResultHandler = /** @class */ (function () {
             for (var _i = 0, _a = Object.keys(p.virtual.props); _i < _a.length; _i++) {
                 var prop = _a[_i];
                 if (isEventHandlerRe.test(prop)) {
-                    p.result[prop] = null;
+                    p.result.removeEventListener(prop.slice(2), p.virtual.props[prop]);
                 }
             }
         }
@@ -1039,6 +1039,15 @@ function setProps(result, v, oldV) {
                     else if (isAttributeRe.test(name_2)) {
                         result.setAttribute(name_2.replace(isAttributeRe, ""), value !== null && value !== void 0 ? value : "");
                     }
+                    else if (isEventHandlerRe.test(name_2)) {
+                        var oldValue = oldV === null || oldV === void 0 ? void 0 : oldV.props[name_2];
+                        if (oldValue) {
+                            result.removeEventListener(name_2.slice(2), oldValue);
+                        }
+                        if (value) {
+                            result.addEventListener(name_2.slice(2), value);
+                        }
+                    }
                     else {
                         result[name_2] = value !== null && value !== void 0 ? value : "";
                     }
@@ -1046,7 +1055,13 @@ function setProps(result, v, oldV) {
         }
         else if (result instanceof SVGElement) {
             if (isEventHandlerRe.test(name_2)) {
-                result[name_2] = value !== null && value !== void 0 ? value : "";
+                var oldValue = oldV === null || oldV === void 0 ? void 0 : oldV.props[name_2];
+                if (oldValue) {
+                    result.removeEventListener(name_2.slice(2), oldValue);
+                }
+                if (value) {
+                    result.addEventListener(name_2.slice(2), value);
+                }
             }
             else {
                 result.setAttribute(name_2, value !== null && value !== void 0 ? value : "");
