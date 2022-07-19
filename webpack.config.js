@@ -137,7 +137,10 @@ module.exports = [
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul.js",
-			library: "matul",
+			library: {
+				name: "matul",
+				type: "umd",
+			},
 		},
 		optimization: {
 			minimize: false,
@@ -149,7 +152,10 @@ module.exports = [
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul.min.js",
-			library: "matul",
+			library: {
+				name: "matul",
+				type: "umd",
+			},
 		},
 	},
 	{
@@ -158,7 +164,10 @@ module.exports = [
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul-core.js",
-			library: "matul",
+			library: {
+				name: "matul",
+				type: "umd",
+			},
 		},
 		optimization: {
 			minimize: false,
@@ -170,7 +179,10 @@ module.exports = [
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul-core.min.js",
-			library: "matul",
+			library: {
+				name: "matul",
+				type: "umd",
+			},
 		},
 	},
 ];

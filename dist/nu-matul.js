@@ -1,5 +1,14 @@
-var matul;
-/******/ (() => { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["matul"] = factory();
+	else
+		root["matul"] = factory();
+})(self, () => {
+return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
@@ -1101,6 +1110,7 @@ function render() {
 
 
 
-matul = __webpack_exports__;
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
+});
