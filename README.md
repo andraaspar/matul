@@ -74,6 +74,8 @@ npm install matul
 
 Supports IE9+ when appropriate polyfills (`console-polyfill`, `core-js/stable`, `raf/polyfill`) are added. For one-shot tests, use `dist/matul-compat.js`, which contains these polyfills, plus `whatwg-fetch` for your convenience.
 
+For those on the bleeding edge, you can use the `nu-` prefixed scripts, like: `dist/nu-matul.js`. These will use the latest JS syntax. They may not work in older browsers.
+
 ## Babel
 
 `.babelrc` should be similar to:

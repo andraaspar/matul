@@ -11,6 +11,26 @@ const common = {
 	},
 };
 
+const commonNu = {
+	...common,
+	target: "web",
+	module: {
+		rules: [
+			{
+				test: /\.tsx?$/,
+				use: [
+					{
+						loader: "ts-loader",
+						options: {
+							configFile: "tsconfig-nu.json",
+						},
+					},
+				],
+			},
+		],
+	},
+};
+
 module.exports = [
 	{
 		...common,
@@ -103,6 +123,48 @@ module.exports = [
 				name: "matul",
 				type: "umd",
 			},
+		},
+	},
+	{
+		...commonNu,
+		entry: "./src/matul.ts",
+		output: {
+			path: path.resolve(__dirname, "dist"),
+			filename: "nu-matul.js",
+			library: "matul",
+		},
+		optimization: {
+			minimize: false,
+		},
+	},
+	{
+		...commonNu,
+		entry: "./src/matul.ts",
+		output: {
+			path: path.resolve(__dirname, "dist"),
+			filename: "nu-matul.min.js",
+			library: "matul",
+		},
+	},
+	{
+		...commonNu,
+		entry: "./src/core.ts",
+		output: {
+			path: path.resolve(__dirname, "dist"),
+			filename: "nu-matul-core.js",
+			library: "matul",
+		},
+		optimization: {
+			minimize: false,
+		},
+	},
+	{
+		...commonNu,
+		entry: "./src/core.ts",
+		output: {
+			path: path.resolve(__dirname, "dist"),
+			filename: "nu-matul-core.min.js",
+			library: "matul",
 		},
 	},
 ];
