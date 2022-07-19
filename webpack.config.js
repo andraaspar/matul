@@ -1,4 +1,5 @@
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const common = {
 	mode: "production",
@@ -9,6 +10,11 @@ const common = {
 	module: {
 		rules: [{ test: /\.tsx?$/, loader: "ts-loader" }],
 	},
+	plugins: [
+		new CopyPlugin({
+			patterns: [{ context: "dist-types/", from: "*" }],
+		}),
+	],
 };
 
 const commonNu = {
@@ -127,7 +133,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/dist/nu-matul.ts",
+		entry: "./src/matul.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul.js",
@@ -139,7 +145,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/dist/nu-matul.ts",
+		entry: "./src/matul.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul.min.js",
@@ -148,7 +154,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/dist/nu-core.ts",
+		entry: "./src/core.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul-core.js",
@@ -160,7 +166,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/dist/nu-core.ts",
+		entry: "./src/core.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul-core.min.js",

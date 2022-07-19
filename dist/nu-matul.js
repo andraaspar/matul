@@ -1101,9 +1101,6 @@ function render() {
 
 
 
-;// CONCATENATED MODULE: ./src/dist/nu-matul.ts
-
-
 matul = __webpack_exports__;
 /******/ })()
 ;

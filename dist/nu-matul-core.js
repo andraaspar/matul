@@ -860,9 +860,6 @@ function createElement(type, props, ...children) {
 
 
 
-;// CONCATENATED MODULE: ./src/dist/nu-core.ts
-
-
 matul = __webpack_exports__;
 /******/ })()
 ;
