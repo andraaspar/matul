@@ -127,7 +127,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/matul.ts",
+		entry: "./src/nu-matul.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul.js",
@@ -139,7 +139,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/matul.ts",
+		entry: "./src/nu-matul.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul.min.js",
@@ -148,7 +148,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/core.ts",
+		entry: "./src/nu-core.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul-core.js",
@@ -160,7 +160,7 @@ module.exports = [
 	},
 	{
 		...commonNu,
-		entry: "./src/core.ts",
+		entry: "./src/nu-core.ts",
 		output: {
 			path: path.resolve(__dirname, "dist"),
 			filename: "nu-matul-core.min.js",
